@@ -1,0 +1,6 @@
+@concept_openapi_documentation_wiki_HostAddress = http://localhost:5244
+
+GET {{concept_openapi_documentation_wiki_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
