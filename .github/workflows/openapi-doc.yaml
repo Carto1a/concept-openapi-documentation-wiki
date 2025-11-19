@@ -1,0 +1,58 @@
+name: Generate OpenAPI Docs to Wiki
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-wiki:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: |
+            10.0.x
+      - run: dotnet build . -c Release
+
+      - name: Show generated OpenAPI file
+        run: cat ./obj/concept-openapi-documentation-wiki.json
+
+      - name: Generate OpenAPI Documentation
+        uses: openapi-generators/openapitools-generator-action@v1
+        with:
+          openapi-file: obj/concept-openapi-documentation-wiki.json
+          generator: markdown
+          output: docs
+
+      - name: Checkout Wiki
+        uses: actions/checkout@v5
+        with:
+          repository: "${{ github.repository }}.wiki"
+          path: wiki
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # --- Sync docs to Wiki ---
+      - name: Sync docs into Wiki
+        run: |
+          rsync -av --delete docs/ wiki/
+
+      # --- Commit and Push ---
+      - name: Commit & Push updates to wiki
+        working-directory: wiki
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          if git diff --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
+          git add .
+          git commit -m "Auto update OpenAPI docs"
+          git push
