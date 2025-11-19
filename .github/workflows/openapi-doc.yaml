@@ -12,6 +12,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
 
+      - name: Extract branch name
+        id: extract_branch
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+
       - name: Setup dotnet
         uses: actions/setup-dotnet@v5
         with:
@@ -42,9 +46,9 @@ jobs:
         run: ls -al && pwd
 
       # --- Sync docs to Wiki ---
-      - name: Sync docs into Wiki
+      - name: Move docs into Wiki
         run: |
-          rsync -av --delete markdown-client/ wiki/
+          rsync -av --delete markdown-client/ wiki/${{ steps.extract_branch.outputs.branch }}
 
       # --- Commit and Push ---
       - name: Commit & Push updates to wiki
