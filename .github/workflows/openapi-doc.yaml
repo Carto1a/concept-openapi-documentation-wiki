@@ -29,12 +29,18 @@ jobs:
           generator: markdown
           output: docs
 
+      - name: Checkout pwd
+        uses: ls -al && pwd
+
       - name: Checkout Wiki
         uses: actions/checkout@v5
         with:
           repository: "${{ github.repository }}.wiki"
           path: wiki
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout pwd
+        uses: ls -al && pwd
 
       # --- Sync docs to Wiki ---
       - name: Sync docs into Wiki
