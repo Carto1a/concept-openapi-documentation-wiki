@@ -22,15 +22,14 @@ jobs:
       - name: Show generated OpenAPI file
         run: cat ./obj/concept-openapi-documentation-wiki.json
 
+      - name: Show generated OpenAPI file
+        run: mv ./obj/concept-openapi-documentation-wiki.json openapi.json
+
       - name: Generate OpenAPI Documentation
         uses: openapi-generators/openapitools-generator-action@v1
         with:
-          openapi-file: obj/concept-openapi-documentation-wiki.json
           generator: markdown
           output: docs
-
-      - name: Checkout pwd
-        run: ls -al && pwd
 
       - name: Checkout Wiki
         uses: actions/checkout@v5
