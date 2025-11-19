@@ -33,7 +33,6 @@ jobs:
         uses: openapi-generators/openapitools-generator-action@v1
         with:
           generator: markdown
-          output: docs
 
       - name: Checkout Wiki
         uses: actions/checkout@v5
@@ -42,18 +41,14 @@ jobs:
           path: wiki
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Checkout pwd
-        run: ls -al && pwd
-
-      # --- Sync docs to Wiki ---
       - name: Move docs into Wiki
         run: |
-          rsync -av --delete markdown-client/ wiki/${{ steps.extract_branch.outputs.branch }}
+          rsync -av --exclude=".git" --delete markdown-client/ wiki/
 
-      # --- Commit and Push ---
       - name: Commit & Push updates to wiki
         working-directory: wiki
         run: |
+          ls -al && pwd
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
