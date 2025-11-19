@@ -44,7 +44,7 @@ jobs:
       # --- Sync docs to Wiki ---
       - name: Sync docs into Wiki
         run: |
-          rsync -av --delete docs/ wiki/
+          rsync -av --delete markdown-client/ wiki/
 
       # --- Commit and Push ---
       - name: Commit & Push updates to wiki
