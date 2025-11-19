@@ -1,0 +1,7 @@
+additionalProperties:
+  includeSchemas: true
+  sortParamsByRequiredFlag: true
+  separateSchemas: true
+  toc: true
+  usePlainTextForLinks: true
+

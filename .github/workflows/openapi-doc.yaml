@@ -32,6 +32,7 @@ jobs:
       - name: Generate OpenAPI Documentation
         uses: openapi-generators/openapitools-generator-action@v1
         with:
+          config-file: openapi-generator-config.yaml
           generator: markdown
 
       - name: Checkout Wiki
